@@ -115,7 +115,7 @@ drawstyled proc
 
 drawaframe proc
 
-    loadvideoes
+    loadvideoesbx
 
     mov ax, 80d; calculating offset
     mul dl
@@ -205,3 +205,4 @@ drawaline proc
     endp
 
 ;----------------------------------------------
+

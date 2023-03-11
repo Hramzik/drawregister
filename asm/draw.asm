@@ -1,18 +1,18 @@
 
 
-name1 db "ax$"
-name1 db "bx$"
-name1 db "cx$"
-name1 db "dx$"
-name1 db "si$"
-name1 db "di$"
-name1 db "bp$"
-name1 db "sp$"
-name1 db "ds$"
-name1 db "es$"
-name1 db "ss$"
-name1 db "cs$"
-name1 db "ip$$"
+name1  db "ax$"
+name2  db "bx$"
+name3  db "cx$"
+name4  db "dx$"
+name5  db "si$"
+name6  db "di$"
+name7  db "bp$"
+name8  db "sp$"
+name9  db "ds$"
+name10 db "es$"
+name11 db "ss$"
+name12 db "cs$"
+name13 db "ip$$"
 
 ;----------------------------------------------
 ; shows all regs on screen
@@ -31,47 +31,48 @@ draw proc
     push dx
     push cx
 
-    mov di, cx; style
-    xor cl, cl
+    mov di, cx; save cx
+
+    mov cl, ch
+    xor ch, ch
     mov si, cx; color
-    mov cx, di
+
+    mov cx, di; save cx
     xor ch, ch
     mov di, cx; style
 
-    mov ch, 9;  width
-    mov cl, 15; height
+    mov ch, 11;  width
+    mov cl, 13; height
 
-    sub dh, 1; x
-    sub dl, 1; y
-
-    call drawaframe
+    call drawstyled
 
     pop cx
     pop dx
 
-    add dh, 1
-    add dl, 1
+    ; add dh, 2; new x
+    ; add dl, 1; new y
 
 
-    mov bx, offset name1
-    pop si; save return adress
-    @@next:
+    ; mov bx, offset name1
+    ; pop si; save return adress
+    ; @@next:
 
-        call drawname
+    ;     call drawname
 
-        mov bp, si; save return adress
-        pop si
-        push bx cx dx
-        call showh
-        pop dx cx bx
-        mov si, bp; save return adress
+    ;     mov bp, si; save return adress
+    ;     pop si
+    ;     push bx cx dx
+    ;     add dh, 3
+    ;     call showh
+    ;     pop dx cx bx
+    ;     mov si, bp; save return adress
 
-        add dl, 1; \n
+    ;     add dl, 1; \n
 
-        cmp [bx], '$'
-        jne @@next
+    ;     cmp byte ptr [bx], '$'
+    ;     jne @@next
 
-    push si; save return adress
+    ; push si; save return adress
 
     ret
     endp
@@ -96,7 +97,7 @@ drawname proc
 
     @@next:
 
-        cmp [bx], '$'
+        cmp byte ptr [bx], '$'
         je @@end
 
         mov     ax,     [bx]

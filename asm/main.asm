@@ -17,7 +17,9 @@ include draw.asm
 
 main:
 
-    call loadnew09h
+    call loadnew08h
+    ;call loadnew09h
+    ;call new08h
 
     loaddxresident
     myexitresident

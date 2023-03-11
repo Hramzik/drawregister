@@ -1,8 +1,8 @@
 
 
 ;----------------------------------------------
-; checks for f11/f12 and links/unlinks myisr2 to system timer
-;            f = unlink myisr1
+; checks for SHOW/NOTSHOW scan codes and links/unlinks myisr08h to system timer
+;            SHUTDOWN = unlink myisr09h
 ;----------------------------------------------
 ; entry:   n/a
 ; exit:    none
@@ -11,18 +11,22 @@
 
 myisr08hloaded db 0
 
+SHOW     equ 3Bh; f1
+NOTSHOW  equ 3Ch; f2
+SHUTDOWN equ 3Dh; f3
+
 new09h proc
     push ax
 
     in al, 60h
 
-    cmp al, 57h
+    cmp al, SHOW
     je @@loadmy08h
 
-    cmp al, 58h
+    cmp al, NOTSHOW
     je @@unloadmy08h
 
-    cmp al, 3ch
+    cmp al, SHUTDOWN
     je @@unloadmy09h
 
 
@@ -53,34 +57,30 @@ old09h db 4 dup (0)
 @@loadmy08h:
 
     pop ax
-    cmp byte ptr myisr08hloaded, 0
+    cmp byte ptr cs:myisr08hloaded, 0
     jne @@exit
 
 
     call loadnew08h
-    mov byte ptr myisr08hloaded, 1
+    mov byte ptr cs:myisr08hloaded, 1
 
 
     jmp @@exit
+
+@@unloadmy09h:
+
+    call loadold09h
 
 @@unloadmy08h:
 
     pop ax
-    cmp byte ptr myisr08hloaded, 1
+    cmp byte ptr cs:myisr08hloaded, 1
     jne @@exit
 
 
     call loadold08h
-    mov byte ptr myisr08hloaded, 0
+    mov byte ptr cs:myisr08hloaded, 0
 
-
-    jmp @@exit
-
-
-@@unloadmy09h:
-
-    pop ax
-    call loadold09h
 
     jmp @@exit
 

@@ -12,19 +12,13 @@
 
 showh proc
 
-    loadvideoes
+    loadvideoesbx
 
-    mov ax, 80d; calculating offset
-    mul dl
-    add al, dh
-    mov di, 2d;
-    mul di
+    calculateoffsetbx; bx = needed
 
 
     mov dx, si; dx = will be shown
 
-
-    mov bx, ax; bx = needed
     mov al, ch; color
     mov cx, 4d; 4 symbols
 
@@ -44,93 +38,93 @@ showh proc
 
 ;----------------------------------------------
 
-;----------------------------------------------
-; shows value from stack in bin
-;----------------------------------------------
-; entry:   [sp]  - will be popped and shown
-;          dh:dl - coords of first simbol
-;          ch    - color
-; exit:    none
-; destr:   ax, bx, cx, di, sp, es
-;----------------------------------------------
+; ;----------------------------------------------
+; ; shows value from stack in bin
+; ;----------------------------------------------
+; ; entry:   [sp]  - will be popped and shown
+; ;          dh:dl - coords of first simbol
+; ;          ch    - color
+; ; exit:    none
+; ; destr:   ax, bx, cx, di, sp, es
+; ;----------------------------------------------
 
-showb proc
+; showb proc
 
-    loadvideoes
+;     loadvideoes
 
-    mov ax, 80d; calculating offset
-    mul dl
-    add al, dh
-    mov di, 2d;
-    mul di
+;     mov ax, 80d; calculating offset
+;     mul dl
+;     add al, dh
+;     mov di, 2d;
+;     mul di
 
-    mov bx, ax; bx = needed
-    pop dx; dx = will be shown
-    mov al, ch; color
-    mov cx, 16d; 16 symbols
+;     mov bx, ax; bx = needed
+;     pop dx; dx = will be shown
+;     mov al, ch; color
+;     mov cx, 16d; 16 symbols
 
-@@next:
-    mov di, dx
-    shr di, 15
-    mov ES:[bx],   di; value
-    mov ES:[bx+1], al; color
-    call tohexascii;   to hex
+; @@next:
+;     mov di, dx
+;     shr di, 15
+;     mov ES:[bx],   di; value
+;     mov ES:[bx+1], al; color
+;     call tohexascii;   to hex
 
-    add bx, 2
-    shl dx, 1
-    loop @@next
+;     add bx, 2
+;     shl dx, 1
+;     loop @@next
 
-    ret
-    endp
+;     ret
+;     endp
 
-;----------------------------------------------
+; ;----------------------------------------------
 
-;----------------------------------------------
-; shows value from stack in dec
-;----------------------------------------------
-; entry:   [sp]  - will be popped and shown
-;          dh:dl - coords of first simbol
-;          ch    - color
-; exit:    none
-; destr:   ax, bx, cx, di, sp, es
-;----------------------------------------------
+; ;----------------------------------------------
+; ; shows value from stack in dec
+; ;----------------------------------------------
+; ; entry:   [sp]  - will be popped and shown
+; ;          dh:dl - coords of first simbol
+; ;          ch    - color
+; ; exit:    none
+; ; destr:   ax, bx, cx, di, sp, es
+; ;----------------------------------------------
 
-showd proc
+; showd proc
 
-    loadvideoes
+;     loadvideoes
 
-    mov ax, 80d; calculating offset
-    mul dl
-    add al, dh
-    mov di, 2d;
-    mul di
+;     mov ax, 80d; calculating offset
+;     mul dl
+;     add al, dh
+;     mov di, 2d;
+;     mul di
 
-    add ax, 8d; пишем с конца!!!
+;     add ax, 8d; пишем с конца!!!
 
-    mov si, ax; si = needed
-    pop di; di = will be shown
-    mov bh, ch; color
-    mov cx, 5d; 5 symbols
+;     mov si, ax; si = needed
+;     pop di; di = will be shown
+;     mov bh, ch; color
+;     mov cx, 5d; 5 symbols
 
-@@next:
-    xor dx, dx
-    mov ax, di
-    mov di, 10d
-    div di
+; @@next:
+;     xor dx, dx
+;     mov ax, di
+;     mov di, 10d
+;     div di
 
-    mov ES:[si],   dx; value
-    mov ES:[si+1], bh; color
-    call tohexascii;   to hex
+;     mov ES:[si],   dx; value
+;     mov ES:[si+1], bh; color
+;     call tohexascii;   to hex
 
-    sub si, 2
-    xor ah, ah
-    mov di, ax; devided di
-    loop @@next
+;     sub si, 2
+;     xor ah, ah
+;     mov di, ax; devided di
+;     loop @@next
 
-    ret
-    endp
+;     ret
+;     endp
 
-;----------------------------------------------
+; ;----------------------------------------------
 
 ;----------------------------------------------
 ; changes value 1-16 in vidmem to ascii code for hex representation

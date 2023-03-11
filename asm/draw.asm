@@ -84,7 +84,7 @@ draw proc
 ;----------------------------------------------
 ; entry:   dh:dl - coords of first simbol
 ;          ch    - color
-;      cs:[bx]   - name, ended by $
+;      ds:[bx]   - name, ended by $
 ; exit:    cs:[bx] = "first after $"
 ; destr:   ax, bp
 ;----------------------------------------------

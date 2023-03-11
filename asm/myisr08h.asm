@@ -17,16 +17,16 @@ predrawloadstack macro
     mov oldbx, bx
     mov bp, sp
 
-    mov bx, ss:[bp + (1 + 8) * 2]
-    push bp; old ip
+    mov bx, ss:[bp + (2 + 8) * 2]
+    push bx; old ip (not correct, but where i will jump)
 
-    mov bx, ss:[bp + (1 + 8 + 1) * 2]
+    mov bx, ss:[bp + (2 + 8 + 1) * 2]
     push bx; old cs
     push ss es
     mov bx, oldds
     push bx; old ds
 
-    sub bp, (1 + 8 + 3) * 2
+    add bp, (2 + 8 + 3) * 2
     push bp; old sp
 
     mov bp, oldbp
@@ -64,29 +64,6 @@ predrawloadreg macro
     endm
 ;----------------------------------------------
 
-;----------------------------------------------
-; loads ds register with cs register value
-; saves old ds value
-;----------------------------------------------
-; entry: none
-; exit:  ds = cs
-; destr: none
-;----------------------------------------------
-
-oldds  dw 0
-buffer dw 0
-
-movdscs macro
-    nop
-
-    mov oldds, ds
-
-    mov buffer, cs
-    mov ds, buffer 
-
-    nop
-    endm
-;----------------------------------------------
 
 ;----------------------------------------------
 ; shows register on the screen, calls old08h

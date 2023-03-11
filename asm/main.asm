@@ -18,8 +18,9 @@ include draw.asm
 main:
 
     ;call loadnew08h
-    call new08h
-    ;call loadnew09h
+    ;int 08h
+    ;call new08h
+    call loadnew09h
     ;call new08h
 
     loaddxresident

@@ -99,15 +99,62 @@ loaddxresident macro
 
 calculateoffsetbp macro
 
-    mov ax, 80d; calculating offset
+    mov ax, 160d; calculating offset
     mul dl
-    add al, dh
-    mov bp, 2d;
-    mul bp
-
+    mov bp, dx
+    shr bp, 8
+    add ax, bp
+    add ax, bp
 
     mov bp, ax; bp = needed
 
     endm
 ;----------------------------------------------
 
+;----------------------------------------------
+; loads bx with calculated offset in vidmem
+;----------------------------------------------
+; entry: dh:dl - coords
+; exit:  none
+; destr: ax, bx (controlled)
+;----------------------------------------------
+
+calculateoffsetbx macro
+
+    mov ax, 160d; calculating offset
+    mul dl
+    xor bh, bh
+    mov bl, dh
+    add ax, bx
+    add ax, bx
+
+    mov bx, ax; bp = needed
+
+    endm
+;----------------------------------------------
+
+
+
+;----------------------------------------------
+; loads ds register with cs register value
+; saves old ds value
+;----------------------------------------------
+; entry: none
+; exit:  ds = cs
+; destr: none
+;----------------------------------------------
+
+oldds  dw 0
+buffer dw 0
+
+movdscs macro
+    nop
+
+    mov oldds, ds
+
+    mov buffer, cs
+    mov ds, buffer 
+
+    nop
+    endm
+;----------------------------------------------

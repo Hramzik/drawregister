@@ -81,7 +81,7 @@ loaddxresident macro
 
     nop
     mov dx, offset main
-    shl dx, 4
+    shr dx, 4
     add dx, 1
     nop
 

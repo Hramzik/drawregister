@@ -11,6 +11,7 @@ style6 db 35,  35,  35,  35,  32, 35,  35,  35,  35
 style7 db 15,  15,  15,  15,  32, 15,  15,  15,  15
 style8 db 4,   4,   4,   4,   32, 4,   4,   4,   4
 style9 db 3,   3,   3,   3,   32, 3,   3,   3,   3
+;style9 db 0,   0,   0,   0,   0, 0,   0,   0,   0
 
 
 ;----------------------------------------------
@@ -131,9 +132,9 @@ drawaframe proc
 
     mov di, cx; save cx
 
-    mov dh, [bp];   left
-    mov dl, [bp+1]; mid
-    mov ah, [bp+2]; right
+    mov dh, ds:[bp];   left
+    mov dl, ds:[bp+1]; mid
+    mov ah, ds:[bp+2]; right
     mov al, al;     width
     call drawaline
 
@@ -142,9 +143,9 @@ drawaframe proc
     @@next:
         mov di, cx; save cx
 
-        mov dh, [bp+3]; left
-        mov dl, [bp+4]; mid
-        mov ah, [bp+5]; right
+        mov dh, ds:[bp+3]; left
+        mov dl, ds:[bp+4]; mid
+        mov ah, ds:[bp+5]; right
         mov al, al;     width
         call drawaline
 
@@ -152,9 +153,9 @@ drawaframe proc
 
     loop @@next
 
-    mov dh, [bp+6]; left
-    mov dl, [bp+7]; mid
-    mov ah, [bp+8]; right
+    mov dh, ds:[bp+6]; left
+    mov dl, ds:[bp+7]; mid
+    mov ah, ds:[bp+8]; right
     mov al, al;     width
     call drawaline
 

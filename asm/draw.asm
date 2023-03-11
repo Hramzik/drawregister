@@ -35,11 +35,11 @@ draw proc
 
     mov cl, ch
     xor ch, ch
-    mov si, cx; color
+    mov si, cx; si = color
 
-    mov cx, di; save cx
+    mov cx, di; restore cx
     xor ch, ch
-    mov di, cx; style
+    mov di, cx; di = style
 
     mov ch, 11;  width
     mov cl, 13; height
@@ -49,30 +49,30 @@ draw proc
     pop cx
     pop dx
 
-    ; add dh, 2; new x
-    ; add dl, 1; new y
+    add dh, 2; new x
+    add dl, 1; new y
 
 
-    ; mov bx, offset name1
-    ; pop si; save return adress
-    ; @@next:
+    mov bx, offset name1
+    pop si; save return adress
+    @@next:
 
-    ;     call drawname
+        call drawname
 
-    ;     mov bp, si; save return adress
-    ;     pop si
-    ;     push bx cx dx
-    ;     add dh, 3
-    ;     call showh
-    ;     pop dx cx bx
-    ;     mov si, bp; save return adress
+        mov bp, si; save return adress
+        pop si
+        push bx cx dx
+        add dh, 3
+        call showh
+        pop dx cx bx
+        mov si, bp; save return adress
 
-    ;     add dl, 1; \n
+        add dl, 1; \n
 
-    ;     cmp byte ptr [bx], '$'
-    ;     jne @@next
+        cmp byte ptr [bx], '$'
+        jne @@next
 
-    ; push si; save return adress
+    push si; save return adress
 
     ret
     endp

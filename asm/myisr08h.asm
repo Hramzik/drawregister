@@ -7,10 +7,11 @@
 ; destr: bx, bp, sp (controlled)
 ;----------------------------------------------
 
-oldbp dw 0
-oldbx dw 0
+oldbp  dw 0
+oldbx  dw 0
 
 predrawloadstack macro
+    nop
 
     mov oldbp, bp
     mov oldbx, bx
@@ -21,7 +22,9 @@ predrawloadstack macro
 
     mov bx, ss:[bp + (1 + 8 + 1) * 2]
     push bx; old cs
-    push ss es ds
+    push ss es
+    mov bx, oldds
+    push bx; old ds
 
     sub bp, (1 + 8 + 3) * 2
     push bp; old sp
@@ -31,6 +34,7 @@ predrawloadstack macro
     mov bx, oldbx
     push di si dx cx bx ax; old bx
 
+    nop
     endm
 ;----------------------------------------------
 
@@ -46,17 +50,43 @@ predrawloadstack macro
 ; destr: cx (controlled), dx (controlled)
 ;----------------------------------------------
 
+COLOR equ 04h
+
 predrawloadreg macro
+    nop
 
     mov dh, 1
     mov dl, 1
     mov ch, COLOR
-    mov cl, 8
+    mov cl, 9; style
 
+    nop
     endm
 ;----------------------------------------------
 
+;----------------------------------------------
+; loads ds register with cs register value
+; saves old ds value
+;----------------------------------------------
+; entry: none
+; exit:  ds = cs
+; destr: none
+;----------------------------------------------
 
+oldds  dw 0
+buffer dw 0
+
+movdscs macro
+    nop
+
+    mov oldds, ds
+
+    mov buffer, cs
+    mov ds, buffer 
+
+    nop
+    endm
+;----------------------------------------------
 
 ;----------------------------------------------
 ; shows register on the screen, calls old08h
@@ -66,22 +96,21 @@ predrawloadreg macro
 ; destr:   none
 ;----------------------------------------------
 
-COLOR equ 04h
-
-
 new08h proc
 
     pusha
     push es
+    push ds
 
-
-    ;predrawloadstack
+    movdscs
+    predrawloadstack
     predrawloadreg
     call draw
 
 
 @@exit:
 
+    pop ds
     pop es
     popa
 

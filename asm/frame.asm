@@ -15,7 +15,7 @@ style9 db 3,   3,   3,   3,   32, 3,   3,   3,   3
 
 
 ;----------------------------------------------
-; draws a frame in entered style
+; draws a frame in entered style in drawbuffer
 ;----------------------------------------------
 ; entry:   dh, dl   - coords of top-left
 ;          ch, cl   - w, h
@@ -104,7 +104,7 @@ drawstyled proc
 
 
 ;----------------------------------------------
-; draws a frame using 9-simbol string
+; draws a frame using 9-simbol string in drawbuffer
 ;----------------------------------------------
 ; entry:   dh, dl   - coords of top-left
 ;          ch, cl   - w, h
@@ -116,14 +116,9 @@ drawstyled proc
 
 drawaframe proc
 
-    loadvideoesbx
+    calculateoffsetbx
+    add bx, offset drawbuffer
 
-    mov ax, 80d; calculating offset
-    mul dl
-    add al, dh
-    mov di, 2d;
-    mul di
-    mov bx, ax; bx = start offset
 
     mov al, ch; width
     xor ch, ch
@@ -166,35 +161,34 @@ drawaframe proc
 ;----------------------------------------------
 
 ;----------------------------------------------
-; draws a line
+; draws a line in drawbuffer
 ;----------------------------------------------
 ; entry:   dh, dl - left, mid ascii
 ;          ah, al - right ascii, width
 ;          bx     - start offset
 ;          si     - color
 ; exit:    bx = <next line start>
-; assumes: ES = vidmem addr
 ; destr:   ah, bx, cx
 ;----------------------------------------------
 
 drawaline proc
 
-    mov ES:[bx],   dh
-    mov ES:[bx+1], si; color
+    mov ds:[bx],   dh
+    mov ds:[bx+1], si; color
     add bx, 2
 
     xor ch, ch
     mov cl, al
     sub cl, 2d; крайние
     @@next:
-        mov ES:[bx],   dl
-        mov ES:[bx+1], si; color
+        mov ds:[bx],   dl
+        mov ds:[bx+1], si; color
         add bx, 2
 
     loop @@next
 
-    mov ES:[bx],   ah
-    mov ES:[bx+1], si; color
+    mov ds:[bx],   ah
+    mov ds:[bx+1], si; color
     add bx, 2
 
     xor ah, ah

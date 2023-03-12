@@ -9,7 +9,7 @@ VIDMEM equ 0b800h
 ; exit:     ES = 0b800h
 ; destroys: bp; самая важная часть!
 ;----------------------------------
-loadvideoes macro
+loadvideoesbp macro
 
     nop
     mov bp, VIDMEM

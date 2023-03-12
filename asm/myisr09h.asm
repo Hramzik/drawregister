@@ -79,6 +79,7 @@ old09h db 4 dup (0)
 
 
     call loadold08h
+    call restorescreen
     mov byte ptr cs:myisr08hloaded, 0
 
 

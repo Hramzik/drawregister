@@ -32,3 +32,14 @@ save
 4 vc: b.txt
 5 cmp save, video, update save
 6 draw
+
+
+0 video: cur
+0 draw:  prev draw
+0 save:  saved video
+
+1 video: cur? (skip) saved? (save)
+    first time: force-save
+2 cpy save -> draw
+3 draw in draw
+4 draw to video

@@ -1,7 +1,7 @@
 
 
 ;----------------------------------------------
-; shows value from si in hex
+; shows value from si in hex in drawbuffer
 ;----------------------------------------------
 ; entry:   si    - will be shown
 ;          dh:dl - coords of first simbol
@@ -12,9 +12,8 @@
 
 showh proc
 
-    loadvideoesbx
-
     calculateoffsetbx; bx = needed
+    add bx, offset drawbuffer
 
 
     mov dx, si; dx = will be shown
@@ -25,8 +24,8 @@ showh proc
 @@next:
     mov di, dx
     shr di, 12
-    mov ES:[bx],   di; value
-    mov ES:[bx+1], al; color
+    mov ds:[bx],   di; value
+    mov ds:[bx+1], al; color
     call tohexascii;   to hex
 
     add bx, 2
@@ -50,7 +49,7 @@ showh proc
 
 ; showb proc
 
-;     loadvideoes
+;     loadvideoesbp
 
 ;     mov ax, 80d; calculating offset
 ;     mul dl
@@ -91,7 +90,7 @@ showh proc
 
 ; showd proc
 
-;     loadvideoes
+;     loadvideoesbp
 
 ;     mov ax, 80d; calculating offset
 ;     mul dl
@@ -127,25 +126,24 @@ showh proc
 ; ;----------------------------------------------
 
 ;----------------------------------------------
-; changes value 1-16 in vidmem to ascii code for hex representation
+; changes value 1-16 in drawbuffer to ascii code for hex representation
 ;----------------------------------------------
-; entry:   bx - adress in vidmem
+; entry:   bx - adress in drawbuffer
 ; exit:    none
-; assumes: ES = vidmem addr
 ; destr:   n/a
 ;----------------------------------------------
 
 tohexascii proc
 
-    cmp ES:[bx], byte ptr 9d; 0-9???
+    cmp ds:[bx], byte ptr 9d; 0-9???
     jbe @@digittohex
 
     @@lettertohex:
-        add ES:[bx], byte ptr 55d; A-F
+        add ds:[bx], byte ptr 55d; A-F
         jmp @@end
 
     @@digittohex:
-        add ES:[bx], byte ptr 48d; 0-9
+        add ds:[bx], byte ptr 48d; 0-9
         jmp @@end
 
     @@end:

@@ -14,8 +14,11 @@ name11 db "ss$"
 name12 db "cs$"
 name13 db "ip$$"
 
+
+drawbuffer db 2*25*80 dup (0)
+
 ;----------------------------------------------
-; shows all regs on screen
+; shows all regs in drawbuffer
 ;----------------------------------------------
 ; entry:   dh:dl - coords of first simbol
 ;          ch    - color
@@ -91,8 +94,9 @@ draw proc
 
 drawname proc
 
-    loadvideoes
     calculateoffsetbp
+    add bp, offset drawbuffer
+
 
 
     @@next:
@@ -101,8 +105,8 @@ drawname proc
         je @@end
 
         mov     ax,     [bx]
-        mov es:[bp],     ax; letter
-        mov es:[bp + 1], ch
+        mov ds:[bp],     ax; letter
+        mov ds:[bp + 1], ch; color
 
         add bx, 1
         add bp, 2

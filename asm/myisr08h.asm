@@ -81,8 +81,14 @@ new08h proc
 
     movdscs
     predrawloadstack
+
+    call savescreen
+    call copysavedtodraw
+
     predrawloadreg
     call draw
+
+    call drawvidmem
 
 
 @@exit:

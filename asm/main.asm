@@ -14,6 +14,7 @@ include myisr08h.asm
 include show.asm
 include frame.asm
 include draw.asm
+include buffers.asm
 
 main:
 

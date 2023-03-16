@@ -20,6 +20,8 @@ RAINBOW     equ  3Eh; f4
 RAINBOW_upd equ 0BEh; f4 up, f4 works in toggle mode
 
 new09h proc
+
+    cli; sti нету, только при восстановлении флагов
     push ax
 
     in al, 60h
@@ -43,7 +45,7 @@ new09h proc
 @@nextisr:
 
     pop ax
-    db 0eah; jmp far, call old isr
+    db 0eah; jmp far, to old isr
 
 old09h db 4 dup (0)
 

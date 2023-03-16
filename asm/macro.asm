@@ -150,10 +150,10 @@ buffer dw 0
 movdscs macro
     nop
 
-    mov oldds, ds
+    mov cs:oldds, ds
 
-    mov buffer, cs
-    mov ds, buffer 
+    mov cs:buffer, cs
+    mov ds, cs:buffer 
 
     nop
     endm

@@ -12,8 +12,6 @@
 
 loadnew09h proc
 
-    cli
-
     mov ax, 0
     mov ds, ax
     mov si, 09h*4
@@ -31,7 +29,6 @@ loadnew09h proc
     mov ds:[bx], ax;   load new isr09 address to 0:[09h*4]
     mov ds:[bx+2], cs; load new isr09 segment
 
-    sti
 
     ret
     endp
@@ -47,7 +44,6 @@ loadnew09h proc
 
 loadold09h proc
 
-    cli
     push ax si di ds es
 
     mov ax, cs
@@ -63,7 +59,7 @@ loadold09h proc
     movsw; load old isr09 address to 0:[09h*4]
 
     pop es ds di si ax
-    sti
+
 
     ret
     endp
@@ -82,7 +78,6 @@ loadold09h proc
 
 loadnew08h proc
 
-    cli
     push ax bx si di ds es
 
 
@@ -107,7 +102,7 @@ loadnew08h proc
 
 
     pop es ds di si bx ax
-    sti
+
 
     ret
     endp
@@ -123,7 +118,6 @@ loadnew08h proc
 
 loadold08h proc
 
-    cli
     push ax si di ds es
 
 
@@ -140,7 +134,7 @@ loadold08h proc
     movsw; load old isr08 address to 0:[08h*4]
 
     pop es ds di si ax
-    sti
+
 
     ret
     endp

@@ -6,66 +6,36 @@
 ; destr:   ax, bx, cx, si, di, es (controlled)
 ;----------------------------------------------
 
-savedflag   db 0
 savedscreen db 2*25*80 dup (0)
 
 savescreen proc
 
-    cmp byte ptr savedflag, 1
-    je @@checksave
+    loadvideoesbx
 
-    @@forcesave: ; принудительный save (вызывается в первый раз)
+    mov si, 0;                  source
+    mov di, offset savedscreen; dest
+    mov bx, offset drawbuffer;  drawbuffer
 
-        loadvideoesbx
+    mov cx, 25*80;  ascii AND color at a time
 
-        mov si, 0;                  source
-        mov di, offset savedscreen; dest
+    @@saveword2:
 
-        mov cx, 25*80;  ascii AND color at a time
+        mov ax, es:[si]; ascii AND color
+        cmp ax, ds:[bx]; what should be there
+        je @@nextword; check if it should be there
 
-        @@saveword1:
+        mov [di], ax; rewrite saved
 
-            mov ax, es:[si]; ascii AND color
-            mov [di], ax
-
+        @@nextword:
             add si, 2
             add di, 2
+            add bx, 2
 
-        loop @@saveword1
-        mov savedflag, 1; now saved
-        jmp @@end
+    loop @@saveword2
 
 
-    @@checksave: ; осторожный save
-
-        loadvideoesbx
-
-        mov si, 0;                  source
-        mov di, offset savedscreen; dest
-        mov bx, offset drawbuffer;  drawbuffer
-
-        mov cx, 25*80;  ascii AND color at a time
-
-        @@saveword2:
-
-            mov ax, es:[si]; ascii AND color
-            cmp ax, ds:[bx]; what should be there
-            je @@nextword; check if it should be there
-
-            mov [di], ax; rewrite saved
-
-            @@nextword:
-                add si, 2
-                add di, 2
-                add bx, 2
-
-        loop @@saveword2
-        jmp @@end
-
-    @@end:
-
-        ret
-        endp
+    ret
+    endp
 ;----------------------------------------------
 
 

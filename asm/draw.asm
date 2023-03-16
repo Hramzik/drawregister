@@ -94,10 +94,12 @@ draw proc
 
 drawname proc
 
+    push cx
     calculateoffsetbp
     add bp, offset drawbuffer
 
-
+    mov cl, ch
+    xor ch, ch
 
     @@next:
 
@@ -106,7 +108,14 @@ drawname proc
 
         mov     ax,     [bx]
         mov ds:[bp],     ax; letter
-        mov ds:[bp + 1], ch; color
+
+        ;push bp; save bp
+        ;push cx
+        ;call getcolor
+        ;pop cx
+        ;pop bp; restore bp
+
+        mov ds:[bp + 1], cl; color
 
         add bx, 1
         add bp, 2
@@ -117,6 +126,7 @@ drawname proc
     @@end:
 
         add bx, 1
+        pop cx
         ret
         endp
 

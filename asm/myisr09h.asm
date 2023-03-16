@@ -10,10 +10,14 @@
 ;----------------------------------------------
 
 myisr08hloaded db 0
+rainbowflag    db 1
+reacttorainow  db 1
 
-SHOW     equ 3Bh; f1
-NOTSHOW  equ 3Ch; f2
-SHUTDOWN equ 3Dh; f3
+SHOW        equ  3Bh; f1
+NOTSHOW     equ  3Ch; f2
+SHUTDOWN    equ  3Dh; f3
+RAINBOW     equ  3Eh; f4
+RAINBOW_upd equ 0BEh; f4 up, f4 works in toggle mode
 
 new09h proc
     push ax
@@ -28,6 +32,12 @@ new09h proc
 
     cmp al, SHUTDOWN
     je @@unloadmy09h
+
+    cmp al, RAINBOW
+    je @@rainbow
+
+    cmp al, RAINBOW_upd
+    je @@rainbow_upd
 
 
 @@nextisr:
@@ -51,12 +61,14 @@ old09h db 4 dup (0)
     out 20h, al
 
 
+    pop ax
+
+
     iret
 
 
 @@loadmy08h:
 
-    pop ax
     cmp byte ptr cs:myisr08hloaded, 0
     jne @@exit
 
@@ -73,7 +85,6 @@ old09h db 4 dup (0)
 
 @@unloadmy08h:
 
-    pop ax
     cmp byte ptr cs:myisr08hloaded, 1
     jne @@exit
 
@@ -85,6 +96,25 @@ old09h db 4 dup (0)
 
     jmp @@exit
 
+@@rainbow:
+
+    cmp byte ptr reacttorainow, 0
+    je @@exit
+
+
+    not rainbowflag
+    shl byte ptr rainbowflag, 7
+    shr byte ptr rainbowflag, 7
+
+    mov reacttorainow, 0
+
+
+    jmp @@exit
+
+@@rainbow_upd:
+
+    mov reacttorainow, 1
+    je @@exit
 
     endp
 

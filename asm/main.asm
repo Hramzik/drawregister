@@ -15,6 +15,7 @@ include show.asm
 include frame.asm
 include draw.asm
 include buffers.asm
+include rainbow.asm
 
 main:
 

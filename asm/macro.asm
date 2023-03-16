@@ -158,3 +158,23 @@ movdscs macro
     nop
     endm
 ;----------------------------------------------
+
+
+;----------------------------------------------
+; inverses rainbowflag (0 <-> 1)
+;----------------------------------------------
+; entry: none
+; exit:  rainbowflag reversed
+; destr: none
+;----------------------------------------------
+
+invertrainbowflag macro
+    nop
+
+    not byte ptr cs:rainbowflag
+    shl byte ptr cs:rainbowflag, 7
+    shr byte ptr cs:rainbowflag, 7
+
+    nop
+    endm
+;----------------------------------------------

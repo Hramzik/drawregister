@@ -109,11 +109,11 @@ drawname proc
         mov     ax,     [bx]
         mov ds:[bp],     ax; letter
 
-        ;push bp; save bp
-        ;push cx
-        ;call getcolor
-        ;pop cx
-        ;pop bp; restore bp
+        push bp; save bp
+        push cx
+        call getcolor
+        pop cx
+        pop bp; restore bp
 
         mov ds:[bp + 1], cl; color
 

@@ -9,7 +9,7 @@
 ; destr:   ax, bp
 ;----------------------------------------------
 currentcolor db ?
-seed  db ?
+seed         db ?
 
 getcolor proc
 
@@ -17,13 +17,7 @@ getcolor proc
     je @@end
 
     mov al, currentcolor
-    xor al, seed
-    shl al, 2
-    add al, 69
-    xor byte ptr seed, al
-    shl byte ptr seed, 3
-    sub byte ptr seed, 42
-    xor byte ptr seed, al
+    add al, 1
     mov currentcolor, al
 
     xor ah, ah

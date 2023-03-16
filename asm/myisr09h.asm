@@ -104,10 +104,7 @@ old09h db 4 dup (0)
     je @@exit
 
 
-    not rainbowflag
-    shl byte ptr rainbowflag, 7
-    shr byte ptr rainbowflag, 7
-
+    invertrainbowflag
     mov reacttorainow, 0
 
 

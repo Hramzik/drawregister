@@ -11,6 +11,7 @@
 ;----------------------------------------------
 
 showh proc
+    push bp
 
     calculateoffsetbx; bx = needed
     add bx, offset drawbuffer
@@ -25,13 +26,20 @@ showh proc
     mov di, dx
     shr di, 12
     mov ds:[bx],   di; value
+
+    push ax
+    call getvalscolor
+    pop ax
     mov ds:[bx+1], al; color
+
     call tohexascii;   to hex
 
     add bx, 2
     shl dx, 4
     loop @@next
 
+
+    pop bp
     ret
     endp
 

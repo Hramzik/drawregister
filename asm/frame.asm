@@ -172,6 +172,8 @@ drawaframe proc
 ;----------------------------------------------
 
 drawaline proc
+    push bp; save bp
+
 
     mov ds:[bx],   dh
     mov ds:[bx+1], si; color
@@ -182,7 +184,14 @@ drawaline proc
     sub cl, 2d; крайние
     @@next:
         mov ds:[bx],   dl
+
+        push ax
+        push si
+        call getframecolor
+        pop si
+        pop ax
         mov ds:[bx+1], si; color
+
         add bx, 2
 
     loop @@next
@@ -196,6 +205,8 @@ drawaline proc
     sub bx, ax
     add bx, 160d
 
+
+    pop bp; restore bp
     ret
     endp
 

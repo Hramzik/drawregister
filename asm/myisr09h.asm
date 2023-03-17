@@ -10,19 +10,31 @@
 ;----------------------------------------------
 
 myisr08hloaded db 0
-rainbowflag    db 1
-reacttorainow  db 1
+
+rainbowflags   db 0; (* * * * * vals names frame)
+currentcolor   db 0; (frame, names, vals) more like current editing color
+
+colorframe     db 04h;
+colornames     db 04h;
+colorvals      db 04h;
 
 SHOW        equ  3Bh; f1
 NOTSHOW     equ  3Ch; f2
 SHUTDOWN    equ  3Dh; f3
-RAINBOW     equ  3Eh; f4
-RAINBOW_upd equ 0BEh; f4 up, f4 works in toggle mode
+
+FRAME       equ  3Eh; f4, switches current modified color
+NAMES       equ  3Fh; f5
+VALS        equ  40h; f6
+PLUS        equ  4Eh; num plus
+MINUS       equ  4Ah; num minus
+RAND        equ  37h; num mult
+RAINBOW     equ  52h; zero on numpad
 
 new09h proc
 
     cli; sti нету, только при восстановлении флагов
     push ax
+    movdscs
 
     in al, 60h
 
@@ -38,12 +50,28 @@ new09h proc
     cmp al, RAINBOW
     je @@rainbow
 
-    cmp al, RAINBOW_upd
-    je @@rainbow_upd
+    cmp al, FRAME
+    je @@frame
+
+    cmp al, NAMES
+    je @@names
+
+    cmp al, VALS
+    je @@vals
+
+    cmp al, PLUS
+    je @@plus
+
+    cmp al, MINUS
+    je @@minus
+
+    cmp al, RAND
+    je @@rand
 
 
 @@nextisr:
 
+    mov ds, oldds
     pop ax
     db 0eah; jmp far, to old isr
 
@@ -100,21 +128,39 @@ old09h db 4 dup (0)
 
 @@rainbow:
 
-    cmp byte ptr reacttorainow, 0
-    je @@exit
-
-
-    invertrainbowflag
-    mov reacttorainow, 0
-
-
+    call rainbowmanager; rainbow.asm
     jmp @@exit
 
-@@rainbow_upd:
+@@frame:
 
-    mov reacttorainow, 1
-    je @@exit
+    mov byte ptr currentcolor, 0
+    jmp @@exit
+
+@@names:
+
+    mov byte ptr currentcolor, 1
+    jmp @@exit
+
+@@vals:
+
+    mov byte ptr currentcolor, 2
+    jmp @@exit
+
+@@plus:
+
+    call plusmanager; rainbow.asm
+    jmp @@exit
+
+@@minus:
+
+    call minusmanager; rainbow.asm
+    jmp @@exit
+
+@@rand:
+
+    call randmanager; rainbow.asm
+    jmp @@exit
+
 
     endp
-
 ;----------------------------------------------

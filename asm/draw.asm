@@ -21,7 +21,7 @@ drawbuffer db 2*25*80 dup (0)
 ; shows all regs in drawbuffer
 ;----------------------------------------------
 ; entry:   dh:dl - coords of first simbol
-;          ch    - color
+;          ch    - color (now only for frame)
 ;          cl    - style
 ;          in stack:
 ; ip cs ss es ds sp bp di si dx cx bx ax
@@ -38,7 +38,7 @@ draw proc
 
     mov cl, ch
     xor ch, ch
-    mov si, cx; si = color
+    mov si, cx
 
     mov cx, di; restore cx
     xor ch, ch
@@ -60,12 +60,16 @@ draw proc
     pop si; save return adress
     @@next:
 
+        push cx
+        mov ch, colornames
         call drawname
+        pop cx
 
         mov bp, si; save return adress
         pop si
         push bx cx dx
         add dh, 3
+        mov ch, colorvals
         call showh
         pop dx cx bx
         mov si, bp; save return adress
@@ -111,7 +115,7 @@ drawname proc
 
         push bp; save bp
         push cx
-        call getcolor
+        call getnamescolor
         pop cx
         pop bp; restore bp
 

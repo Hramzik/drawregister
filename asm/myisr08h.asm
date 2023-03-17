@@ -50,14 +50,12 @@ predrawloadstack macro
 ; destr: cx (controlled), dx (controlled)
 ;----------------------------------------------
 
-COLOR equ 04h
-
 predrawloadreg macro
     nop
 
     mov dh, 1
     mov dl, 1
-    mov ch, COLOR
+    mov ch, colorframe
     mov cl, 9; style
 
     nop
